@@ -1,7 +1,7 @@
 export enum Role {
-  ADMIN = "admin",
-  SENDER = "sender",
-  RECEIVER = "receiver",
+  ADMIN = "ADMIN",
+  SENDER = "SENDER",
+  RECEIVER = "RECEVER",
 }
 
 export enum IsActive {
@@ -11,8 +11,8 @@ export enum IsActive {
 }
 
 export interface IAuth {
-  provider: string;
-  id: string;
+  provider: "google"|"credentials";
+  id?: string;
   providerID: string;
 }
 

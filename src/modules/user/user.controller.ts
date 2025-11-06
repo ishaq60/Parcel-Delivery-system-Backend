@@ -23,7 +23,7 @@ export const createUser = async (req: Request, res: Response,next:NextFunction) 
 //getall users
 const allUsers= async (req: Request, res: Response,next:NextFunction) =>{
   try {
-    const users=await UserService.getAllusers()
+    const users=await UserService.getAllUsers()
  res.status(httpStatus.OK).json({
   success:true,
   message:"Users retried successfully",
