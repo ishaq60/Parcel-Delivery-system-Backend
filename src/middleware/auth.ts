@@ -26,7 +26,7 @@ const auth = (...requiredRoles: string[]) =>
       const actualToken = token.startsWith('Bearer ') ? token.slice(7) : token;
 
       // Verify token
-      const verifiedUser = verifyToken(actualToken, envVars.jwt_Access_secret as Secret);
+      const verifiedUser = verifyToken(actualToken, envVars.jwt_Access_secret);
       
       // Normalize user object for consistent controller access
       req.user = {

@@ -18,21 +18,21 @@ const generateTrackingId = (): string => {
 const createParcel = async (payload: Partial<IParcel>, senderId: string): Promise<IParcel | null> => {
 console.log(senderId)
   // Check if sender exists and is not blocked
-  const sender = await User.findById(senderId) as IUser;
-  if (!sender || sender.isActive === IsActive.BLOCKED || sender.isActive === IsActive.INACTIVE) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'Sender not found or blocked!');
+  const sender = (await User.findById(senderId)) as IUser;
+  if (!sender || sender.isActive === IsActive.BLOCKED || sender.isActive === IsActive.INACTIVE || !sender._id) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Sender not found, blocked, inactive, or missing ID!');
   }
 
   const trackingId = generateTrackingId();
   const initialStatusLog: IStatusLog = {
     status: 'requested',
     timestamp: new Date(),
-    updatedBy: sender._id, // Sender initiates the request
+    updatedBy: new Types.ObjectId(sender._id), // Sender initiates the request
     note: 'Parcel requested by sender',
   };
 
   payload.trackingId = trackingId;
-  payload.sender = sender._id;
+  payload.sender = new Types.ObjectId(sender._id);
   payload.statusLogs = [initialStatusLog];
   payload.currentStatus = 'requested';
   payload.isBlocked = false;

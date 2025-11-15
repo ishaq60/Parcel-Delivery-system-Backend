@@ -1,0 +1,16 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const route_1 = require("./router/route");
+const app = (0, express_1.default)();
+// Parse JSON bodies
+app.use(express_1.default.json());
+// Enable CORS
+app.use((0, cors_1.default)());
+// Routes
+app.use("/api/v1", route_1.router);
+exports.default = app;
