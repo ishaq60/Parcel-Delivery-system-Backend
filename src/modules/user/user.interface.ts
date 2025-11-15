@@ -1,7 +1,7 @@
 export enum Role {
   ADMIN = "ADMIN",
   SENDER = "SENDER",
-  RECEIVER = "RECEVER",
+  RECEIVER = "RECEIVER",
 }
 
 export enum IsActive {

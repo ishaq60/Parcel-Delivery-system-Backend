@@ -1,29 +1,26 @@
-import {Server} from "http"
+import { Server } from "http";
+import mongoose from "mongoose";
+import app from "./app";
+import { envVars } from "./config/env";
 
-import mongoose from "mongoose"
-import app from "./app"
-import { envVars } from "./config/env"
+let server: Server;
 
+const startServer = async () => {
+  try {
+    await mongoose.connect(envVars.DB_URL as string);
+    console.log("Connected to DB!");
 
+    server = app.listen(envVars.PORT, () => {
+      console.log(`Server is listening on port ${envVars.PORT}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-let server:Server
-
-const startServer=async()=>{
-try {
-
-    await  mongoose.connect(envVars.DB_URL as string)
-console.log("connected to Db!!")
-server= app.listen(envVars.PORT,()=>{
-    console.log(`server is listening to port ${envVars.PORT}`)
-})
-} catch (error) {
-    console.log(error)
-}
-}
-startServer()
+startServer();
 
 process.on("unhandledRejection", (error) => {
-
   if (server) {
     server.close(() => process.exit(1));
   } else {
@@ -32,7 +29,6 @@ process.on("unhandledRejection", (error) => {
 });
 
 process.on("uncaughtException", (error) => {
-
   if (server) {
     server.close(() => process.exit(1));
   } else {
@@ -41,8 +37,9 @@ process.on("uncaughtException", (error) => {
 });
 
 process.on("SIGTERM", () => {
-  
   if (server) {
     server.close(() => process.exit(0));
+  } else {
+    process.exit(0);
   }
 });

@@ -1,22 +1,16 @@
- import express, { Request, Response } from "express"
+import express from "express";
+import cors from "cors";
+import { router } from "./router/route";
 
-import cors from "cors"
-import { router } from "./router/route"
+const app = express();
 
-import { globalerrorhandaler } from "./middleware/globalehandaler"
-import { success } from "zod"
-import { notfound } from "./middleware/notfound"
- const app=express()
-app.use(express.json())
-app.use(cors())
+// Parse JSON bodies
+app.use(express.json());
 
-app.use("/api/v1",router)
+// Enable CORS
+app.use(cors());
 
-app.get('/',(req:Request,res:Response)=>{
-    res.status(200).json({message:"welcome to parcel delivery system"})
-})
-export default app
+// Routes
+app.use("/api/v1", router);
 
-app.use(globalerrorhandaler)
-
-app.use(notfound)
+export default app;
