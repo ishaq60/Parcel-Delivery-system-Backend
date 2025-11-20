@@ -54,11 +54,10 @@ const getAllParcels = async (
   const andConditions: any[] = [];
 
   if (searchTerm) {
-    andConditions.push({
-      $or: ['trackingId', 'receiver.name', 'receiver.phone', 'deliveryAddress'].map(field => ({
-        [field]: { $regex: searchTerm, $options: 'i' },
-      })),
-    });
+    const searchConditions = ['trackingId', 'receiver.name', 'receiver.phone', 'deliveryAddress'].map(field => ({
+      [field]: { $regex: searchTerm, $options: 'i' },
+    }));
+    andConditions.push({ $or: searchConditions });
   }
 
   if (currentStatus) {
@@ -116,14 +115,13 @@ const getMyParcels = async (
 
   const skip = (page - 1) * limit;
 
-  const andConditions: any[] = [{ sender: new Types.ObjectId(userId) }];
+  const andConditions: Record<string, unknown>[] = [{ sender: new Types.ObjectId(userId) }];
 
   if (searchTerm) {
-    andConditions.push({
-      $or: ['trackingId', 'receiver.name', 'receiver.phone', 'deliveryAddress'].map(field => ({
-        [field]: { $regex: searchTerm, $options: 'i' },
-      })),
-    });
+    const searchConditions = ['trackingId', 'receiver.name', 'receiver.phone', 'deliveryAddress'].map(field => ({
+      [field]: { $regex: searchTerm, $options: 'i' },
+    }));
+    andConditions.push({ $or: searchConditions });
   }
 
   if (currentStatus) {
@@ -161,14 +159,13 @@ const getIncomingParcels = async (
     throw new ApiError(httpStatus.NOT_FOUND, 'Receiver not found or phone number not associated!');
   }
 
-  const andConditions: any[] = [{ 'receiver.phone': receiverUser.phone }];
+  const andConditions: Record<string, unknown>[] = [{ 'receiver.phone': receiverUser.phone }];
 
   if (searchTerm) {
-    andConditions.push({
-      $or: ['trackingId', 'sender.name', 'deliveryAddress'].map(field => ({
-        [field]: { $regex: searchTerm, $options: 'i' },
-      })),
-    });
+    const searchConditions = ['trackingId', 'sender.name', 'deliveryAddress'].map(field => ({
+      [field]: { $regex: searchTerm, $options: 'i' },
+    }));
+    andConditions.push({ $or: searchConditions });
   }
 
   if (currentStatus) {

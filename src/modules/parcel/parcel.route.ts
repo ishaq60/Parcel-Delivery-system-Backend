@@ -26,7 +26,7 @@ router.get(
 // Get parcels created by logged-in sender
 router.get(
   "/my-parcels",
-  auth(ENUM_USER_ROLE.SENDER),
+  auth(ENUM_USER_ROLE.SENDER, ENUM_USER_ROLE.ADMIN),
   ParcelController.getMyParcels
 );
 

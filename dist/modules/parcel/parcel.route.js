@@ -16,7 +16,7 @@ router.post("/create-parcel", (0, auth_1.default)(user_1.ENUM_USER_ROLE.SENDER, 
 // Get all parcels — only admin
 router.get("/", (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN), parcel_controller_1.ParcelController.getAllParcels);
 // Get parcels created by logged-in sender
-router.get("/my-parcels", (0, auth_1.default)(user_1.ENUM_USER_ROLE.SENDER), parcel_controller_1.ParcelController.getMyParcels);
+router.get("/my-parcels", (0, auth_1.default)(user_1.ENUM_USER_ROLE.SENDER, user_1.ENUM_USER_ROLE.ADMIN), parcel_controller_1.ParcelController.getMyParcels);
 // Get parcels assigned to receiver (delivery person)
 router.get("/incoming-parcels", (0, auth_1.default)(user_1.ENUM_USER_ROLE.RECEIVER), parcel_controller_1.ParcelController.getIncomingParcels);
 // Get single parcel (admin, sender, receiver)

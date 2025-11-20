@@ -56,11 +56,10 @@ const getAllParcels = (filters, paginationOptions) => __awaiter(void 0, void 0, 
     const skip = (page - 1) * limit;
     const andConditions = [];
     if (searchTerm) {
-        andConditions.push({
-            $or: ['trackingId', 'receiver.name', 'receiver.phone', 'deliveryAddress'].map(field => ({
-                [field]: { $regex: searchTerm, $options: 'i' },
-            })),
-        });
+        const searchConditions = ['trackingId', 'receiver.name', 'receiver.phone', 'deliveryAddress'].map(field => ({
+            [field]: { $regex: searchTerm, $options: 'i' },
+        }));
+        andConditions.push({ $or: searchConditions });
     }
     if (currentStatus) {
         andConditions.push({ currentStatus });
@@ -103,11 +102,10 @@ const getMyParcels = (userId, filters, paginationOptions) => __awaiter(void 0, v
     const skip = (page - 1) * limit;
     const andConditions = [{ sender: new mongoose_1.Types.ObjectId(userId) }];
     if (searchTerm) {
-        andConditions.push({
-            $or: ['trackingId', 'receiver.name', 'receiver.phone', 'deliveryAddress'].map(field => ({
-                [field]: { $regex: searchTerm, $options: 'i' },
-            })),
-        });
+        const searchConditions = ['trackingId', 'receiver.name', 'receiver.phone', 'deliveryAddress'].map(field => ({
+            [field]: { $regex: searchTerm, $options: 'i' },
+        }));
+        andConditions.push({ $or: searchConditions });
     }
     if (currentStatus) {
         andConditions.push({ currentStatus });
@@ -134,11 +132,10 @@ const getIncomingParcels = (userId, filters, paginationOptions) => __awaiter(voi
     }
     const andConditions = [{ 'receiver.phone': receiverUser.phone }];
     if (searchTerm) {
-        andConditions.push({
-            $or: ['trackingId', 'sender.name', 'deliveryAddress'].map(field => ({
-                [field]: { $regex: searchTerm, $options: 'i' },
-            })),
-        });
+        const searchConditions = ['trackingId', 'sender.name', 'deliveryAddress'].map(field => ({
+            [field]: { $regex: searchTerm, $options: 'i' },
+        }));
+        andConditions.push({ $or: searchConditions });
     }
     if (currentStatus) {
         andConditions.push({ currentStatus });
