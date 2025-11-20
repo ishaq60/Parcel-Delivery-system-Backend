@@ -37,7 +37,7 @@ router.get(
   ParcelController.getIncomingParcels
 );
 
-// Get single parcel (admin, sender, receiver)
+
 router.get(
   "/:id",
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SENDER, ENUM_USER_ROLE.RECEIVER),
