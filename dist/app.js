@@ -13,4 +13,8 @@ app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 // Routes
 app.use("/api/v1", route_1.router);
+// Home route for deployment health check
+app.get("/", (req, res) => {
+    res.send("Parcel Delivery System API is running!");
+});
 exports.default = app;

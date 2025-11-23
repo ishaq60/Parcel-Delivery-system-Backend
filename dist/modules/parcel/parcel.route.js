@@ -19,7 +19,6 @@ router.get("/", (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN), parcel_control
 router.get("/my-parcels", (0, auth_1.default)(user_1.ENUM_USER_ROLE.SENDER, user_1.ENUM_USER_ROLE.ADMIN), parcel_controller_1.ParcelController.getMyParcels);
 // Get parcels assigned to receiver (delivery person)
 router.get("/incoming-parcels", (0, auth_1.default)(user_1.ENUM_USER_ROLE.RECEIVER), parcel_controller_1.ParcelController.getIncomingParcels);
-// Get single parcel (admin, sender, receiver)
 router.get("/:id", (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.SENDER, user_1.ENUM_USER_ROLE.RECEIVER), parcel_controller_1.ParcelController.getSingleParcel);
 // Update parcel — only admin
 router.patch("/:id", (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN), (0, validateRequest_1.validateRequest)(parcel_validation_1.ParcelValidation.updateParcelZodSchema), parcel_controller_1.ParcelController.updateParcel);
