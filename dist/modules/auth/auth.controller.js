@@ -18,13 +18,28 @@ const http_status_codes_1 = require("http-status-codes");
 const auth_service_1 = require("./auth.service");
 const credentailsLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        //   const user=await UserService.createUser(req.body)
         const user = yield auth_service_1.AuthService.credentailsLogin(req.body);
         res.status(http_status_1.default.CREATED).json({
             success: true,
             StatusCodes: http_status_codes_1.StatusCodes.OK,
             message: "User Login successfully",
-            data: user, // optional but useful to return created user
+            data: user,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+const googleLoginCallback = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        const result = yield auth_service_1.AuthService.googleLogin(user);
+        res.status(http_status_1.default.OK).json({
+            success: true,
+            StatusCodes: http_status_codes_1.StatusCodes.OK,
+            message: "Google login successful",
+            data: result,
         });
     }
     catch (error) {
@@ -33,5 +48,6 @@ const credentailsLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.Authcontroler = {
-    credentailsLogin
+    credentailsLogin,
+    googleLoginCallback,
 };

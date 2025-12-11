@@ -1,26 +1,43 @@
-import  httpStatus  from 'http-status';
+import httpStatus from 'http-status';
 
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { AuthService } from './auth.service';
+import { IUser } from '../user/user.interface';
 
-
-const credentailsLogin=async (req: Request, res: Response,next:NextFunction) => {
+const credentailsLogin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-//   const user=await UserService.createUser(req.body)
-const user=await AuthService.credentailsLogin(req.body)
+    const user = await AuthService.credentailsLogin(req.body);
     res.status(httpStatus.CREATED).json({
       success: true,
-      StatusCodes:StatusCodes.OK,
+      StatusCodes: StatusCodes.OK,
       message: "User Login successfully",
-      data: user, // optional but useful to return created user
+      data: user,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-  next(error)
-}
-}
+    next(error);
+  }
+};
 
-export const Authcontroler={
-    credentailsLogin
-}
+const googleLoginCallback = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = req.user as IUser;
+    const result = await AuthService.googleLogin(user);
+    
+    res.status(httpStatus.OK).json({
+      success: true,
+      StatusCodes: StatusCodes.OK,
+      message: "Google login successful",
+      data: result,
+    });
+  } catch (error: unknown) {
+    console.error(error);
+    next(error);
+  }
+};
+
+export const Authcontroler = {
+  credentailsLogin,
+  googleLoginCallback,
+};

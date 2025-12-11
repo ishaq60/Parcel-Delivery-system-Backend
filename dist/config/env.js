@@ -15,6 +15,9 @@ const loadEnvironmentVariables = () => {
         "jwt_Access_secret",
         "jwt_Access_EXPIRES_IN",
         "BCRYPT_SALT_ROUNDS",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "GOOGLE_CALLBACK_URL",
     ];
     requiredVars.forEach((key) => {
         if (!process.env[key]) {
@@ -28,6 +31,9 @@ const loadEnvironmentVariables = () => {
         jwt_Access_secret: process.env.jwt_Access_secret,
         jwt_Access_EXPIRES_IN: process.env.jwt_Access_EXPIRES_IN,
         BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS,
+        GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+        GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+        GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
     };
 };
 exports.envVars = loadEnvironmentVariables();

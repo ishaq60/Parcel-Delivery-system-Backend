@@ -19,19 +19,16 @@ const http_status_1 = __importDefault(require("http-status"));
 const user_model_1 = require("../user/user.model");
 const jwt_1 = require("../../utils/jwt");
 const env_1 = require("../../config/env");
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const credentailsLogin = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload;
     const isUserExist = yield user_model_1.User.findOne({ email });
     if (!isUserExist) {
-        const error = new Error("User not found");
-        error.statusCode = http_status_1.default.BAD_REQUEST;
-        throw error;
+        throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "User not found");
     }
     const isPasswordMatch = yield bcryptjs_1.default.compare(password, isUserExist.password);
     if (!isPasswordMatch) {
-        const error = new Error("Password is incorrect");
-        error.statusCode = http_status_1.default.UNAUTHORIZED;
-        throw error;
+        throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, "Password is incorrect");
     }
     const jwtPayload = {
         id: isUserExist._id,
@@ -46,9 +43,34 @@ const credentailsLogin = (payload) => __awaiter(void 0, void 0, void 0, function
             id: isUserExist._id,
             email: isUserExist.email,
             role: isUserExist.role,
+            name: isUserExist.name,
+            picture: isUserExist.picture,
+        },
+    };
+});
+const googleLogin = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!user) {
+        throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "User not found");
+    }
+    const jwtPayload = {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+    };
+    // issue token
+    const accessToken = (0, jwt_1.generateToken)(jwtPayload, env_1.envVars.jwt_Access_secret, env_1.envVars.jwt_Access_EXPIRES_IN);
+    return {
+        accessToken,
+        user: {
+            id: user._id,
+            email: user.email,
+            role: user.role,
+            name: user.name,
+            picture: user.picture,
         },
     };
 });
 exports.AuthService = {
     credentailsLogin,
+    googleLogin,
 };
