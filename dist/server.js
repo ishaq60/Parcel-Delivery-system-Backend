@@ -18,18 +18,26 @@ const env_1 = require("./config/env");
 let server;
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect(env_1.envVars.DB_URL);
-        console.log("Connected to DB!");
+        // Connect to MongoDB
+        if (!mongoose_1.default.connections[0].readyState) {
+            yield mongoose_1.default.connect(env_1.envVars.DB_URL);
+            console.log("Connected to DB!");
+        }
         server = app_1.default.listen(env_1.envVars.PORT, () => {
             console.log(`Server is listening on port ${env_1.envVars.PORT}`);
         });
     }
     catch (error) {
-        console.log(error);
+        console.error("Failed to start server:", error);
+        process.exit(1);
     }
 });
-startServer();
+// Only start server if not in serverless environment
+if (process.env.VERCEL !== "1") {
+    startServer();
+}
 process.on("unhandledRejection", (error) => {
+    console.error("Unhandled Rejection:", error);
     if (server) {
         server.close(() => process.exit(1));
     }
@@ -38,6 +46,7 @@ process.on("unhandledRejection", (error) => {
     }
 });
 process.on("uncaughtException", (error) => {
+    console.error("Uncaught Exception:", error);
     if (server) {
         server.close(() => process.exit(1));
     }
@@ -46,6 +55,7 @@ process.on("uncaughtException", (error) => {
     }
 });
 process.on("SIGTERM", () => {
+    console.log("SIGTERM received, shutting down gracefully");
     if (server) {
         server.close(() => process.exit(0));
     }
@@ -53,3 +63,5 @@ process.on("SIGTERM", () => {
         process.exit(0);
     }
 });
+// Export app for serverless functions (Vercel)
+exports.default = app_1.default;
